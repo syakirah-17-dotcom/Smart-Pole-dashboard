@@ -11,93 +11,211 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Supabase JS Client CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
 </head>
 
-<body class="bg-gray-900 text-white font-sans min-h-screen p-6">
+<body
+  class="bg-slate-950 text-slate-100 min-h-screen p-4 md:p-8 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black">
 
-  <div class="max-w-6xl mx-auto">
-    <!-- Header -->
-    <header class="flex justify-between items-center mb-8 border-b border-gray-700 pb-4">
-      <div>
-        <h1 class="text-3xl font-bold text-blue-400">Smart Pole System</h1>
-        <p class="text-gray-400 text-sm">Real-time Environmental Monitoring Dashboard</p>
+  <div class="max-w-7xl mx-auto space-y-8">
+
+    <!-- Top Header Navigation -->
+    <header
+      class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-6 glass-card rounded-2xl shadow-2xl gap-4 border-l-4 border-l-blue-500">
+      <div class="space-y-1">
+        <div class="flex items-center gap-2">
+          <span class="relative flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+          </span>
+          <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Sistem Aktif</span>
+        </div>
+        <h1
+          class="text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+          Smart Pole System
+        </h1>
+        <p class="text-xs md:text-sm text-slate-400">Pemantauan Persekitaran Masa Nyata & Analitik Sensor</p>
       </div>
-      <div id="status-badge" class="px-4 py-2 rounded-full font-bold text-sm bg-gray-700 text-gray-300">
+
+      <div id="status-badge"
+        class="px-5 py-2.5 rounded-xl font-bold text-xs md:text-sm tracking-wide bg-slate-800 text-slate-400 border border-slate-700 shadow-inner flex items-center gap-2">
+        <svg class="animate-spin h-4 w-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+          viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+          </path>
+        </svg>
         MEMUATKAN...
       </div>
     </header>
 
-    <!-- Cards Section -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <!-- Cards Metric Section -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
       <!-- Temperature Card -->
-      <div class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
-        <h2 class="text-gray-400 text-sm font-semibold uppercase">Suhu</h2>
-        <div class="flex items-baseline mt-2">
-          <span id="temp-val" class="text-4xl font-extrabold text-red-400">--</span>
-          <span class="text-xl ml-1 text-gray-400">°C</span>
+      <div
+        class="glass-card p-6 rounded-2xl shadow-xl hover:border-red-500/40 transition-all duration-300 relative overflow-hidden group">
+        <div
+          class="absolute -right-6 -top-6 w-24 h-24 bg-red-500/10 rounded-full blur-xl group-hover:bg-red-500/20 transition-all">
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Suhu Persekitaran</span>
+          <div class="p-3 bg-red-500/10 rounded-xl text-red-400 border border-red-500/20">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+              </path>
+            </svg>
+          </div>
+        </div>
+        <div class="flex items-baseline mt-4">
+          <span id="temp-val"
+            class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-amber-300">--</span>
+          <span class="text-2xl font-bold ml-1 text-slate-400">°C</span>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+          <span>Ambik dari DHT22</span>
+          <span class="text-red-400 font-semibold">Sensor Suhu</span>
         </div>
       </div>
 
       <!-- Humidity Card -->
-      <div class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
-        <h2 class="text-gray-400 text-sm font-semibold uppercase">Kelembapan</h2>
-        <div class="flex items-baseline mt-2">
-          <span id="humid-val" class="text-4xl font-extrabold text-blue-400">--</span>
-          <span class="text-xl ml-1 text-gray-400">%</span>
+      <div
+        class="glass-card p-6 rounded-2xl shadow-xl hover:border-blue-500/40 transition-all duration-300 relative overflow-hidden group">
+        <div
+          class="absolute -right-6 -top-6 w-24 h-24 bg-blue-500/10 rounded-full blur-xl group-hover:bg-blue-500/20 transition-all">
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Kelembapan Udara</span>
+          <div class="p-3 bg-blue-500/10 rounded-xl text-blue-400 border border-blue-500/20">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
+              </path>
+            </svg>
+          </div>
+        </div>
+        <div class="flex items-baseline mt-4">
+          <span id="humid-val"
+            class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">--</span>
+          <span class="text-2xl font-bold ml-1 text-slate-400">%</span>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+          <span>Kelembapan Nisbi</span>
+          <span class="text-blue-400 font-semibold">Sensor Kelembapan</span>
         </div>
       </div>
 
       <!-- Light Level Card -->
-      <div class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
-        <h2 class="text-gray-400 text-sm font-semibold uppercase">Paras Cahaya (LDR)</h2>
-        <div class="flex items-baseline mt-2">
-          <span id="light-val" class="text-4xl font-extrabold text-yellow-400">--</span>
-          <span class="text-xl ml-1 text-gray-400">%</span>
+      <div
+        class="glass-card p-6 rounded-2xl shadow-xl hover:border-amber-500/40 transition-all duration-300 relative overflow-hidden group">
+        <div
+          class="absolute -right-6 -top-6 w-24 h-24 bg-amber-500/10 rounded-full blur-xl group-hover:bg-amber-500/20 transition-all">
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Paras Cahaya (LDR)</span>
+          <div class="p-3 bg-amber-500/10 rounded-xl text-amber-400 border border-amber-500/20">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+              </path>
+            </svg>
+          </div>
+        </div>
+        <div class="flex items-baseline mt-4">
+          <span id="light-val"
+            class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-yellow-500">--</span>
+          <span class="text-2xl font-bold ml-1 text-slate-400">%</span>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+          <span>Intensiti Cahaya</span>
+          <span class="text-amber-400 font-semibold">Sensor LDR</span>
         </div>
       </div>
+
     </div>
 
     <!-- Chart Section -->
-    <div class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700 mb-8">
-      <h2 class="text-xl font-bold mb-4 text-gray-200">Graf Trend Suhu & Kelembapan</h2>
-      <div class="relative h-64">
+    <div class="glass-card p-6 rounded-2xl shadow-xl">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="text-lg font-bold text-white">Graf Analisis Trend</h2>
+          <p class="text-xs text-slate-400">Perbandingan bacaan Suhu (°C) & Kelembapan (%) terkini</p>
+        </div>
+        <span class="text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded-full border border-slate-700">10 Rekod
+          Terakhir</span>
+      </div>
+      <div class="relative h-72 w-full">
         <canvas id="sensorChart"></canvas>
       </div>
     </div>
 
     <!-- Live Data Table -->
-    <div class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
-      <h2 class="text-xl font-bold mb-4 text-gray-200">5 Rekod Terbaharu (Supabase)</h2>
+    <div class="glass-card rounded-2xl shadow-xl overflow-hidden">
+      <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-bold text-white">5 Rekod Data Terbaharu</h2>
+          <p class="text-xs text-slate-400">Diselaraskan secara automatik dengan Pangkalan Data Supabase</p>
+        </div>
+        <span
+          class="px-3 py-1 bg-blue-500/10 text-blue-400 text-xs font-semibold rounded-full border border-blue-500/20">Live
+          Sync</span>
+      </div>
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
           <thead>
-            <tr class="border-b border-gray-700 text-gray-400 text-sm">
-              <th class="p-3">Masa</th>
-              <th class="p-3">Suhu (°C)</th>
-              <th class="p-3">Kelembapan (%)</th>
-              <th class="p-3">Cahaya (%)</th>
-              <th class="p-3">Status</th>
+            <tr class="bg-slate-900/50 text-slate-400 text-xs uppercase tracking-wider border-b border-slate-800">
+              <th class="p-4 font-semibold">Masa Log</th>
+              <th class="p-4 font-semibold">Suhu</th>
+              <th class="p-4 font-semibold">Kelembapan</th>
+              <th class="p-4 font-semibold">Cahaya</th>
+              <th class="p-4 font-semibold">Status Sistem</th>
             </tr>
           </thead>
-          <tbody id="table-body" class="divide-y divide-gray-700 text-sm">
+          <tbody id="table-body" class="divide-y divide-slate-800/60 text-sm">
             <tr>
-              <td colspan="5" class="p-4 text-center text-gray-500">Memuatkan data dari Supabase...</td>
+              <td colspan="5" class="p-8 text-center text-slate-500">Memuatkan data dari Supabase...</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
+
   </div>
 
   <!-- JavaScript Logic -->
   <script>
-    // ---------- SUPABASE CONFIG ----------
     const SUPABASE_URL = "https://rmwmcahrjqbkqrzmjegm.supabase.co";
     const SUPABASE_KEY = "sb_publishable_ujMJCWVSOgrXoDyuQ7cGmw_o-9ILntI";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Setup Chart.js
+    // Setup Custom Chart.js
     const ctx = document.getElementById('sensorChart').getContext('2d');
+
+    // Gradient backgrounds for chart
+    const tempGradient = ctx.createLinearGradient(0, 0, 0, 300);
+    tempGradient.addColorStop(0, 'rgba(248, 113, 113, 0.3)');
+    tempGradient.addColorStop(1, 'rgba(248, 113, 113, 0.0)');
+
+    const humidGradient = ctx.createLinearGradient(0, 0, 0, 300);
+    humidGradient.addColorStop(0, 'rgba(96, 165, 250, 0.3)');
+    humidGradient.addColorStop(1, 'rgba(96, 165, 250, 0.0)');
+
     const sensorChart = new Chart(ctx, {
       type: 'line',
       data: {
@@ -106,18 +224,24 @@
           {
             label: 'Suhu (°C)',
             borderColor: '#f87171',
-            backgroundColor: 'rgba(248, 113, 113, 0.1)',
+            borderWidth: 3,
+            backgroundColor: tempGradient,
             data: [],
             fill: true,
-            tension: 0.3
+            tension: 0.4,
+            pointBackgroundColor: '#f87171',
+            pointRadius: 4
           },
           {
             label: 'Kelembapan (%)',
             borderColor: '#60a5fa',
-            backgroundColor: 'rgba(96, 165, 250, 0.1)',
+            borderWidth: 3,
+            backgroundColor: humidGradient,
             data: [],
             fill: true,
-            tension: 0.3
+            tension: 0.4,
+            pointBackgroundColor: '#60a5fa',
+            pointRadius: 4
           }
         ]
       },
@@ -125,16 +249,15 @@
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-          x: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } },
-          y: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } }
+          x: { ticks: { color: '#64748b', font: { family: 'Plus Jakarta Sans' } }, grid: { color: 'rgba(51, 65, 85, 0.3)' } },
+          y: { ticks: { color: '#64748b', font: { family: 'Plus Jakarta Sans' } }, grid: { color: 'rgba(51, 65, 85, 0.3)' } }
         },
         plugins: {
-          legend: { labels: { color: '#f3f4f6' } }
+          legend: { labels: { color: '#cbd5e1', font: { family: 'Plus Jakarta Sans', weight: '600' } } }
         }
       }
     });
 
-    // Fungsi Ambil Data dari Supabase
     async function fetchData() {
       const { data, error } = await supabaseClient
         .from('sensor_data')
@@ -150,47 +273,54 @@
       if (data && data.length > 0) {
         const latest = data[0];
 
-        // 1. Kemaskini Kad Real-time
+        // 1. Update Real-time Cards
         document.getElementById('temp-val').innerText = latest.temperature;
         document.getElementById('humid-val').innerText = latest.humidity;
         document.getElementById('light-val').innerText = latest.light_level;
 
-        // Status Badge
+        // Status Badge Styling
         const statusBadge = document.getElementById('status-badge');
-        statusBadge.innerText = latest.status;
         if (latest.status === 'DANGER') {
-          statusBadge.className = "px-4 py-2 rounded-full font-bold text-sm bg-red-600 text-white animate-pulse";
+          statusBadge.innerHTML = `<span class="h-2 w-2 rounded-full bg-red-400 animate-ping"></span> DANGER`;
+          statusBadge.className = "px-5 py-2.5 rounded-xl font-bold text-xs md:text-sm bg-red-500/20 text-red-400 border border-red-500/40 shadow-lg shadow-red-500/10";
         } else if (latest.status === 'WARNING') {
-          statusBadge.className = "px-4 py-2 rounded-full font-bold text-sm bg-yellow-500 text-black";
+          statusBadge.innerHTML = `<span class="h-2 w-2 rounded-full bg-amber-400"></span> WARNING`;
+          statusBadge.className = "px-5 py-2.5 rounded-xl font-bold text-xs md:text-sm bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-lg shadow-amber-500/10";
         } else {
-          statusBadge.className = "px-4 py-2 rounded-full font-bold text-sm bg-green-600 text-white";
+          statusBadge.innerHTML = `<span class="h-2 w-2 rounded-full bg-emerald-400"></span> NORMAL`;
+          statusBadge.className = "px-5 py-2.5 rounded-xl font-bold text-xs md:text-sm bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-lg shadow-emerald-500/10";
         }
 
-        // 2. Kemaskini Graf (Guna 10 data terakhir)
+        // 2. Update Chart
         const reversedData = [...data].reverse();
-        sensorChart.data.labels = reversedData.map(d => new Date(d.created_at).toLocaleTimeString());
+        sensorChart.data.labels = reversedData.map(d => new Date(d.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
         sensorChart.data.datasets[0].data = reversedData.map(d => d.temperature);
         sensorChart.data.datasets[1].data = reversedData.map(d => d.humidity);
         sensorChart.update();
 
-        // 3. Kemaskini Jadual 5 Rekod Terbaharu
+        // 3. Update Table
         const tableBody = document.getElementById('table-body');
         tableBody.innerHTML = '';
         data.slice(0, 5).forEach(row => {
           const tr = document.createElement('tr');
+          tr.className = "hover:bg-slate-800/40 transition-colors";
           tr.innerHTML = `
-            <td class="p-3 text-gray-300">${new Date(row.created_at).toLocaleString()}</td>
-            <td class="p-3 font-semibold text-red-400">${row.temperature}</td>
-            <td class="p-3 font-semibold text-blue-400">${row.humidity}</td>
-            <td class="p-3 font-semibold text-yellow-400">${row.light_level}</td>
-            <td class="p-3 font-bold ${row.status === 'DANGER' ? 'text-red-500' : row.status === 'WARNING' ? 'text-yellow-400' : 'text-green-400'}">${row.status}</td>
+            <td class="p-4 text-slate-300 font-medium">${new Date(row.created_at).toLocaleString()}</td>
+            <td class="p-4 font-bold text-red-400">${row.temperature} °C</td>
+            <td class="p-4 font-bold text-blue-400">${row.humidity} %</td>
+            <td class="p-4 font-bold text-amber-300">${row.light_level} %</td>
+            <td class="p-4">
+              <span class="px-3 py-1 rounded-full text-xs font-bold ${row.status === 'DANGER' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
+              row.status === 'WARNING' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' :
+                'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+            }">${row.status}</span>
+            </td>
           `;
           tableBody.appendChild(tr);
         });
       }
     }
 
-    // Panggil fungsi pertama kali & tetapkan auto-refresh setiap 5 saat
     fetchData();
     setInterval(fetchData, 5000);
   </script>
