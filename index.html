@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Pole Dashboard</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Supabase JS Client CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body class="bg-gray-900 text-white font-sans min-h-screen p-6">
+
+  <div class="max-w-6xl mx-auto">
+    <!-- Header -->
+    <header class="flex justify-between items-center mb-8 border-b border-gray-700 pb-4">
+      <div>
+        <h1 class="text-3xl font-bold text-blue-400">Smart Pole System</h1>
+        <p class="text-gray-400 text-sm">Real-time Environmental Monitoring Dashboard</p>
+      </div>
+      <div id="status-badge" class="px-4 py-2 rounded-full font-bold text-sm bg-gray-700 text-gray-300">
+        MEMUATKAN...
+      </div>
+    </header>
+
+    <!-- Cards Section -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <!-- Temperature Card -->
+      <div class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
+        <h2 class="text-gray-400 text-sm font-semibold uppercase">Suhu</h2>
+        <div class="flex items-baseline mt-2">
+          <span id="temp-val" class="text-4xl font-extrabold text-red-400">--</span>
+          <span class="text-xl ml-1 text-gray-400">°C</span>
+        </div>
+      </div>
+
+      <!-- Humidity Card -->
+      <div class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
+        <h2 class="text-gray-400 text-sm font-semibold uppercase">Kelembapan</h2>
+        <div class="flex items-baseline mt-2">
+          <span id="humid-val" class="text-4xl font-extrabold text-blue-400">--</span>
+          <span class="text-xl ml-1 text-gray-400">%</span>
+        </div>
+      </div>
+
+      <!-- Light Level Card -->
+      <div class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
+        <h2 class="text-gray-400 text-sm font-semibold uppercase">Paras Cahaya (LDR)</h2>
+        <div class="flex items-baseline mt-2">
+          <span id="light-val" class="text-4xl font-extrabold text-yellow-400">--</span>
+          <span class="text-xl ml-1 text-gray-400">%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart Section -->
+    <div class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700 mb-8">
+      <h2 class="text-xl font-bold mb-4 text-gray-200">Graf Trend Suhu & Kelembapan</h2>
+      <div class="relative h-64">
+        <canvas id="sensorChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Live Data Table -->
+    <div class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
+      <h2 class="text-xl font-bold mb-4 text-gray-200">5 Rekod Terbaharu (Supabase)</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-gray-700 text-gray-400 text-sm">
+              <th class="p-3">Masa</th>
+              <th class="p-3">Suhu (°C)</th>
+              <th class="p-3">Kelembapan (%)</th>
+              <th class="p-3">Cahaya (%)</th>
+              <th class="p-3">Status</th>
+            </tr>
+          </thead>
+          <tbody id="table-body" class="divide-y divide-gray-700 text-sm">
+            <tr>
+              <td colspan="5" class="p-4 text-center text-gray-500">Memuatkan data dari Supabase...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    // ---------- SUPABASE CONFIG ----------
+    const SUPABASE_URL = "https://rmwmcahrjqbkqrzmjegm.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_ujMJCWVSOgrXoDyuQ7cGmw_o-9ILntI";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // Setup Chart.js
+    const ctx = document.getElementById('sensorChart').getContext('2d');
+    const sensorChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label: 'Suhu (°C)',
+            borderColor: '#f87171',
+            backgroundColor: 'rgba(248, 113, 113, 0.1)',
+            data: [],
+            fill: true,
+            tension: 0.3
+          },
+          {
+            label: 'Kelembapan (%)',
+            borderColor: '#60a5fa',
+            backgroundColor: 'rgba(96, 165, 250, 0.1)',
+            data: [],
+            fill: true,
+            tension: 0.3
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } },
+          y: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } }
+        },
+        plugins: {
+          legend: { labels: { color: '#f3f4f6' } }
+        }
+      }
+    });
+
+    // Fungsi Ambil Data dari Supabase
+    async function fetchData() {
+      const { data, error } = await supabaseClient
+        .from('sensor_data')
+        .select('*')
+        .order('id', { ascending: false })
+        .limit(10);
+
+      if (error) {
+        console.error('Error fetching data:', error);
+        return;
+      }
+
+      if (data && data.length > 0) {
+        const latest = data[0];
+
+        // 1. Kemaskini Kad Real-time
+        document.getElementById('temp-val').innerText = latest.temperature;
+        document.getElementById('humid-val').innerText = latest.humidity;
+        document.getElementById('light-val').innerText = latest.light_level;
+
+        // Status Badge
+        const statusBadge = document.getElementById('status-badge');
+        statusBadge.innerText = latest.status;
+        if (latest.status === 'DANGER') {
+          statusBadge.className = "px-4 py-2 rounded-full font-bold text-sm bg-red-600 text-white animate-pulse";
+        } else if (latest.status === 'WARNING') {
+          statusBadge.className = "px-4 py-2 rounded-full font-bold text-sm bg-yellow-500 text-black";
+        } else {
+          statusBadge.className = "px-4 py-2 rounded-full font-bold text-sm bg-green-600 text-white";
+        }
+
+        // 2. Kemaskini Graf (Guna 10 data terakhir)
+        const reversedData = [...data].reverse();
+        sensorChart.data.labels = reversedData.map(d => new Date(d.created_at).toLocaleTimeString());
+        sensorChart.data.datasets[0].data = reversedData.map(d => d.temperature);
+        sensorChart.data.datasets[1].data = reversedData.map(d => d.humidity);
+        sensorChart.update();
+
+        // 3. Kemaskini Jadual 5 Rekod Terbaharu
+        const tableBody = document.getElementById('table-body');
+        tableBody.innerHTML = '';
+        data.slice(0, 5).forEach(row => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td class="p-3 text-gray-300">${new Date(row.created_at).toLocaleString()}</td>
+            <td class="p-3 font-semibold text-red-400">${row.temperature}</td>
+            <td class="p-3 font-semibold text-blue-400">${row.humidity}</td>
+            <td class="p-3 font-semibold text-yellow-400">${row.light_level}</td>
+            <td class="p-3 font-bold ${row.status === 'DANGER' ? 'text-red-500' : row.status === 'WARNING' ? 'text-yellow-400' : 'text-green-400'}">${row.status}</td>
+          `;
+          tableBody.appendChild(tr);
+        });
+      }
+    }
+
+    // Panggil fungsi pertama kali & tetapkan auto-refresh setiap 5 saat
+    fetchData();
+    setInterval(fetchData, 5000);
+  </script>
+</body>
+
+</html>
