@@ -1,6 +1,6 @@
 # Smart Pole Monitoring System
 
-An IoT environmental monitoring prototype built with **ESP32** that collects real-time sensor readings, triggers 3-tier local visual and audio alerts, syncs telemetry to **Supabase**, and displays live data on a web dashboard alongside official **DOE** air quality data.
+An IoT smart pole monitoring prototype built with **ESP32** that collects real-time sensor readings, triggers 3-tier local visual and audio alerts, syncs telemetry to **Supabase**, and displays live data on a web dashboard alongside official **DOE** air quality data.
 
 ## Features
 - **Environmental & Gas Sensing:** Reads temperature and humidity (`DHT22`), light level (`LDR`), and carbon monoxide (`SC16-CO` over UART2).
